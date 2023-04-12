@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "549203696908",
+    "project_id": "santehaggi-project",
+    "storage_bucket": "santehaggi-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549203696908:android:faf68a8e9a8ebf8c1cfd29",
+        "android_client_info": {
+          "package_name": "com.mersileattiomam.santehaggi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549203696908-dll2q213rmrqd12q8css9f2hg3kb5r6o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG9MhmTIyTOaNFa5QS69NKACcV7PMERuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549203696908-dll2q213rmrqd12q8css9f2hg3kb5r6o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
