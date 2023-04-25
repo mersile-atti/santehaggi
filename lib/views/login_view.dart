@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // ignore: unused_import
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:santehaggi/constants/routes.dart';
 
 // ignore: unused_import
 import '../firebase_options.dart';
@@ -63,18 +64,15 @@ class _LoginViewState extends State<LoginView> {
               final password = _password.text;
               // ignore: unused_local_variable
               try {
-                // ignore: unused_local_variable
                 final userCredential = await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: email, password: password);
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/notes/', (route) => false);
+                    .pushNamedAndRemoveUntil(notesRoute, (route) => false);
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
-                  // ignore: avoid_print
                   devtools.log("User not found");
                 } else if (e.code == 'wrong-password') {
-                  // ignore: avoid_print
                   devtools.log("Wrong password");
                 }
               }
@@ -84,7 +82,7 @@ class _LoginViewState extends State<LoginView> {
           TextButton(
               onPressed: () {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
               child: const Text('Not registered yet? Register here!'))
         ],
