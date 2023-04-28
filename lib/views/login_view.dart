@@ -7,7 +7,10 @@ import 'package:santehaggi/constants/routes.dart';
 
 // ignore: unused_import
 import '../firebase_options.dart';
+// ignore: unused_import
 import 'dart:developer' as devtools show log;
+
+import '../utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -64,17 +67,23 @@ class _LoginViewState extends State<LoginView> {
               final password = _password.text;
               // ignore: unused_local_variable
               try {
+                // ignore: unused_local_variable
                 final userCredential = await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: email, password: password);
+                // ignore: use_build_context_synchronously
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil(notesRoute, (route) => false);
               } on FirebaseAuthException catch (e) {
                 if (e.code == 'user-not-found') {
-                  devtools.log("User not found");
+                  await showErrorDialog(context, "User not found");
                 } else if (e.code == 'wrong-password') {
-                  devtools.log("Wrong password");
+                  await showErrorDialog(context, 'Wrong credentials');
+                } else {
+                  await showErrorDialog(context, 'Error: ${e.code}');
                 }
+              } catch (e) {
+                await showErrorDialog(context, e.toString());
               }
             },
             child: const Text('Login'),
