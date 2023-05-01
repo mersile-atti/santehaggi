@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -8,12 +10,37 @@ import 'crud_exceptions.dart';
 class NotesService {
   Database? _db;
 
+  List<DatabaseNotes> _notes = [];
+
+  final _notesStreamController =
+      StreamController<List<DatabaseNotes>>.broadcast();
+
+  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+    try {
+      final user = await getUser(email: email);
+      return user;
+    } on CouldNotFoundUser {
+      final createdUser = await createUser(email: email);
+      return createdUser;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _cachNotes() async {
+    final allNotes = await getAllNotes();
+    _notes = allNotes.toList();
+    _notesStreamController.add(_notes);
+  }
+
   Future<DatabaseNotes> updateNote(
       {required DatabaseNotes note, required String text}) async {
     final db = _getDatabaseOrThrow();
 
+    // make sure that the note is in the database
     await getNote(id: note.id);
 
+    // update the note
     final updatedNotes = await db.update(
       noteTable,
       {
@@ -27,7 +54,11 @@ class NotesService {
     if (updatedNotes != 1) {
       throw CouldNotUpdatedNote();
     } else {
-      return await getNote(id: note.id);
+      final updateNote = await getNote(id: note.id);
+      _notes.removeWhere((note) => note.id == updateNote.id);
+      _notes.add(updateNote);
+      _notesStreamController.add(_notes);
+      return updateNote;
     }
   }
 
@@ -49,13 +80,20 @@ class NotesService {
     if (notes.isEmpty) {
       throw CouldNotFoundNote();
     } else {
-      return DatabaseNotes.fromRow(notes.first);
+      final note = DatabaseNotes.fromRow(notes.first);
+      _notes.removeWhere((note) => note.id == id);
+      _notes.add(note);
+      _notesStreamController.add(_notes);
+      return note;
     }
   }
 
   Future<int> deleteAllNotes() async {
     final db = _getDatabaseOrThrow();
-    return await db.delete(noteTable);
+    final numberOfDeletion = await db.delete(noteTable);
+    _notes = [];
+    _notesStreamController.add(_notes);
+    return numberOfDeletion;
   }
 
   Future<void> deleteNote({required int id}) async {
@@ -68,6 +106,9 @@ class NotesService {
 
     if (deletedNotes != 1) {
       throw CouldNotDeleteNote();
+    } else {
+      _notes.removeWhere((note) => note.id == id);
+      _notesStreamController.add(_notes);
     }
   }
 
@@ -94,6 +135,8 @@ class NotesService {
       isSyncedWithCloud: true,
     );
 
+    _notes.add(note);
+    _notesStreamController.add(_notes);
     return note;
   }
 
@@ -183,6 +226,7 @@ class NotesService {
       await db.execute(createUserTable);
       // Create note table
       await db.execute(createNoteTable);
+      await _cachNotes();
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
     }
