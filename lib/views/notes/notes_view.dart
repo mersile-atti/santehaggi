@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:santehaggi/services/auth/auth_service.dart';
 import 'package:santehaggi/services/crud/notes_services.dart';
-import '../constants/routes.dart';
-import '../enums/men_action.dart';
+import '../../constants/routes.dart';
+import '../../enums/men_action.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -32,8 +32,14 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Main UI'),
+        title: const Text('Your Notes'),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(newNoteRoute);
+            },
+            icon: const Icon(Icons.add),
+          ),
           PopupMenuButton<MenuAction>(onSelected: (value) async {
             // ignore: avoid_print
             switch (value) {
