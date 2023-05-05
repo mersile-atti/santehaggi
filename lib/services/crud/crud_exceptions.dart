@@ -1,18 +1,6 @@
-class DatabaseAlreadyOpenExcepton implements Exception {
-  final String message;
+class DatabaseAlreadyOpenException implements Exception {}
 
-  const DatabaseAlreadyOpenExcepton(this.message);
-
-  @override
-  String toString() => 'DatabaseAlreadyOpenExcepton: $message';
-}
-
-class DatabaseIsNotOpen implements Exception {
-  const DatabaseIsNotOpen();
-
-  @override
-  String toString() => 'DatabaseIsNotOpen';
-}
+class DatabaseIsNotOpen implements Exception {}
 
 class UnableToGetDocumentsDirectory implements Exception {}
 
@@ -20,10 +8,10 @@ class CouldNotDeleteUser implements Exception {}
 
 class UserAlreadyExists implements Exception {}
 
-class CouldNotFoundUser implements Exception {}
+class CouldNotFindUser implements Exception {}
 
 class CouldNotDeleteNote implements Exception {}
 
-class CouldNotFoundNote implements Exception {}
+class CouldNotFindNote implements Exception {}
 
-class CouldNotUpdatedNote implements Exception {}
+class CouldNotUpdateNote implements Exception {}

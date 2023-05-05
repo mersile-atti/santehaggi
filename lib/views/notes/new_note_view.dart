@@ -11,15 +11,15 @@ class NewNoteView extends StatefulWidget {
 }
 
 class _NewNoteViewState extends State<NewNoteView> {
-  DatabaseNotes? _notes;
+  DatabaseNote? _notes;
   late final NotesService _notesService;
   late final TextEditingController _textController;
 
   @override
   void initState() {
-    super.initState();
     _notesService = NotesService();
     _textController = TextEditingController();
+    super.initState();
   }
 
   void _textControllerListener() async {
@@ -39,13 +39,13 @@ class _NewNoteViewState extends State<NewNoteView> {
     _textController.addListener(_textControllerListener);
   }
 
-  Future<DatabaseNotes> createNewNote() async {
+  Future<DatabaseNote> createNewNote() async {
     final existingNote = _notes;
     if (existingNote != null) {
       return existingNote;
     }
-    final currentUser = AuthService.firebase().currentUser;
-    final email = currentUser!.email!;
+    final currentUser = AuthService.firebase().currentUser!;
+    final email = currentUser.email!;
     final owner = await _notesService.getUser(email: email);
     return await _notesService.createNote(owner: owner);
   }
@@ -60,10 +60,10 @@ class _NewNoteViewState extends State<NewNoteView> {
   void _saveNoteIfTextIsNotEmpty() async {
     final note = _notes;
     final text = _textController.text;
-    if (text.isNotEmpty && note != null) {
+    if (note != null && text.isNotEmpty) {
       await _notesService.updateNote(
         note: note,
-        text: _textController.text,
+        text: text,
       );
     }
   }
@@ -86,7 +86,7 @@ class _NewNoteViewState extends State<NewNoteView> {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               // ignore: unnecessary_cast
-              _notes = snapshot.data as DatabaseNotes?;
+              _notes = snapshot.data as DatabaseNote?;
               _setupTextControllerListener();
               return TextField(
                 controller: _textController,
@@ -94,8 +94,6 @@ class _NewNoteViewState extends State<NewNoteView> {
                 maxLines: null,
                 decoration: const InputDecoration(
                   hintText: 'Write your note here...',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(16),
                 ),
               );
             default:
