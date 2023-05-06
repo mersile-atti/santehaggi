@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:santehaggi/constants/routes.dart';
 import 'package:santehaggi/services/auth/auth_service.dart';
 import 'package:santehaggi/views/login_view.dart';
-import 'package:santehaggi/views/notes/new_note_view.dart';
+import 'package:santehaggi/views/notes/create_update_note_view.dart';
 import 'package:santehaggi/views/notes/notes_view.dart';
 import 'package:santehaggi/views/register_view.dart';
 import 'package:rive/rive.dart';
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           registerRoute: (context) => const RegisterView(),
           notesRoute: (context) => const NotesView(),
           verifyEmailRoute: (context) => const VerifyEmailView(),
-          newNoteRoute: (context) => const NewNoteView(),
+          createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
         });
   }
 }
