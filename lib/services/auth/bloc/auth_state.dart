@@ -18,12 +18,6 @@ class AuthStateLoggedIn extends AuthState {
   const AuthStateLoggedIn(this.user);
 }
 
-//In case in login failure
-class AuthStateLoginFailure extends AuthState {
-  final Exception exception;
-  const AuthStateLoginFailure(this.exception);
-}
-
 //Verify email state
 
 class AuthStateNeedVerification extends AuthState {
@@ -33,7 +27,8 @@ class AuthStateNeedVerification extends AuthState {
 //log out. No nedd to verify email
 
 class AuthStateLoggedOut extends AuthState {
-  const AuthStateLoggedOut();
+  final Exception? exception;
+  const AuthStateLoggedOut(this.exception);
 }
 
 class AuthStateLoggedOutFailure extends AuthState {
