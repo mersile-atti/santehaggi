@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart' show immutable;
+import 'package:equatable/equatable.dart';
 
 import '../auth_user.dart';
 
 @immutable
 abstract class AuthState {
   const AuthState();
+}
+
+class AuthStateUninitialized extends AuthState {
+  const AuthStateUninitialized();
+}
+
+class AuthStateRegistering extends AuthState {
+  final Exception? exception;
+  const AuthStateRegistering(this.exception);
 }
 
 // Loading state
@@ -26,12 +36,14 @@ class AuthStateNeedVerification extends AuthState {
 
 //log out. No nedd to verify email
 
-class AuthStateLoggedOut extends AuthState {
+class AuthStateLoggedOut extends AuthState with EquatableMixin {
   final Exception? exception;
-  const AuthStateLoggedOut(this.exception);
-}
+  final bool isLoading;
+  const AuthStateLoggedOut({
+    required this.exception,
+    required this.isLoading,
+  });
 
-class AuthStateLoggedOutFailure extends AuthState {
-  final Exception exception;
-  const AuthStateLoggedOutFailure(this.exception);
+  @override
+  List<Object?> get props => [exception, isLoading];
 }
