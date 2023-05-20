@@ -1,4 +1,7 @@
 {
     "fluttergpt.apiKey": "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",
-    "CodeGPT.model": "gpt-3.5-turbo"
+    "CodeGPT.model": "gpt-3.5-turbo",
+    "cSpell.words": [
+        "santehaggi"
+    ]
 }
